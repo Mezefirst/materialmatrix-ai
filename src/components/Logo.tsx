@@ -4,9 +4,10 @@ interface LogoProps {
   size?: 'sm' | 'md' | 'lg'
   showText?: boolean
   className?: string
+  onClick?: () => void
 }
 
-export function Logo({ size = 'md', showText = true, className = '' }: LogoProps) {
+export function Logo({ size = 'md', showText = true, className = '', onClick }: LogoProps) {
   const sizeClasses = {
     sm: 'w-8 h-8',
     md: 'w-10 h-10',
@@ -26,7 +27,10 @@ export function Logo({ size = 'md', showText = true, className = '' }: LogoProps
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div 
+      className={`flex items-center gap-3 ${onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''} ${className}`}
+      onClick={onClick}
+    >
       <div className={`${sizeClasses[size]} rounded-lg bg-gradient-to-br from-primary via-accent to-primary flex items-center justify-center shadow-lg`}>
         <Atom size={iconSizes[size]} className="text-primary-foreground" weight="fill" />
       </div>

@@ -206,7 +206,7 @@ function App() {
         <div className="container mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <Logo size="md" showText={false} />
+              <Logo size="md" showText={false} onClick={() => setShowLanding(true)} />
               <div>
                 <h1 className="text-xl font-bold tracking-tight">{t.app.materialTailoringPlatform}</h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">
