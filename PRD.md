@@ -12,6 +12,20 @@ A progressive web application that empowers materials scientists, engineers, and
 
 ## Essential Features
 
+### Landing Page with Multi-Language Support
+- **Functionality**: Attractive landing page with animated hero section, feature highlights, statistics display, and multi-language support for English, Swedish, French, Arabic, and Amharic with RTL support for Arabic
+- **Purpose**: Professional first impression for users, clear value proposition, and accessible interface in multiple languages for international users
+- **Trigger**: First-time visitors or users who haven't dismissed the landing page
+- **Progression**: View landing page → Select preferred language from dropdown → Click "Get Started" → Enter main application
+- **Success criteria**: Visually appealing design with gradient effects and smooth animations, all text content properly translated in 5 languages, RTL layout support for Arabic, language preference persists across sessions, smooth transition to main app
+
+### Branded Logo & Visual Identity
+- **Functionality**: Custom "MatTailor" logo with gradient atom icon, used consistently across landing page and application header
+- **Purpose**: Establish brand identity and professional appearance
+- **Trigger**: Visible on every page in header and landing page
+- **Progression**: Logo displays in header → Click logo returns to home/landing → Logo reinforces brand throughout app
+- **Success criteria**: Recognizable logo with gradient styling, consistent sizing across views, professional appearance
+
 ### Dedicated Results & Analysis Page
 - **Functionality**: Comprehensive analysis view accessible via "View Results" button, displaying detailed material simulation results in a clean, organized layout with tabbed property sections, performance scores, sustainability metrics, cost analysis, and composition breakdown
 - **Purpose**: Provide users with a focused, distraction-free environment to review and analyze simulation results without builder UI clutter; enable easy navigation between multiple saved material results

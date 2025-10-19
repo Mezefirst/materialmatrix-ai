@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Material, Composition, MaterialProperties, OptimizationResult, Monomer, ThermalProperties } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Toaster } from '@/components/ui/sonner'
+import { LandingPage } from '@/components/LandingPage'
+import { Logo } from '@/components/Logo'
+import { LanguageSelector } from '@/components/LanguageSelector'
 import { PeriodicTable } from '@/components/PeriodicTable'
 import { CompositionEditor } from '@/components/CompositionEditor'
 import { PropertyDisplay } from '@/components/PropertyDisplay'
@@ -21,10 +24,12 @@ import { PropertyTargetDialog } from '@/components/PropertyTargetDialog'
 import { CompositionAnalysis } from '@/components/CompositionAnalysis'
 import { SustainabilityCostSummary } from '@/components/SustainabilityCostSummary'
 import { ResultsPage } from '@/components/ResultsPage'
-import { Atom, Database, Flask, Plus, Download, Drop, ChartLine } from '@phosphor-icons/react'
+import { useLanguage } from '@/hooks/use-language'
+import { Database, Flask, Plus, Download, Drop, ChartLine, Atom } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 function App() {
+  const [showLanding, setShowLanding] = useKV<boolean>('show-landing', true)
   const [savedMaterials, setSavedMaterials] = useKV<Material[]>('saved-materials', [])
   const [currentMaterial, setCurrentMaterial] = useState<Material | null>(null)
   const [composition, setComposition] = useState<Composition>({})
@@ -34,6 +39,7 @@ function App() {
   const [materialMode, setMaterialMode] = useState<'element' | 'polymer'>('element')
   const [selectedMonomers, setSelectedMonomers] = useState<Monomer[]>([])
   const [viewMode, setViewMode] = useState<'builder' | 'results'>('builder')
+  const { language, setLanguage, t } = useLanguage()
 
   const handleElementToggle = (symbol: string) => {
     if (symbol in composition) {
@@ -167,6 +173,15 @@ function App() {
     setViewMode('results')
   }
 
+  if (showLanding) {
+    return (
+      <>
+        <Toaster />
+        <LandingPage onEnter={() => setShowLanding(false)} />
+      </>
+    )
+  }
+
   if (viewMode === 'results') {
     return (
       <>
@@ -191,31 +206,34 @@ function App() {
         <div className="container mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Atom size={24} className="text-primary-foreground" weight="fill" />
-              </div>
+              <Logo size="md" showText={false} />
               <div>
-                <h1 className="text-xl font-bold tracking-tight">Material Tailoring Platform</h1>
+                <h1 className="text-xl font-bold tracking-tight">{t.app.materialTailoringPlatform}</h1>
                 <p className="text-xs text-muted-foreground hidden sm:block">
-                  AI-Powered Material Design & Optimization
+                  {t.app.aiPoweredMaterialDesign}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <LanguageSelector 
+                currentLanguage={language} 
+                onLanguageChange={setLanguage}
+                variant="ghost"
+              />
               <PropertyTargetDialog onApplyComposition={setComposition} />
               {properties && (
                 <Button variant="default" size="sm" onClick={handleViewResults}>
                   <ChartLine size={16} />
-                  <span className="hidden sm:inline ml-2">View Results</span>
+                  <span className="hidden sm:inline ml-2">{t.app.viewResults}</span>
                 </Button>
               )}
               <Button variant="outline" size="sm" onClick={handleNewMaterial}>
                 <Plus size={16} />
-                <span className="hidden sm:inline ml-2">New</span>
+                <span className="hidden sm:inline ml-2">{t.app.newMaterial}</span>
               </Button>
               <Button variant="outline" size="sm" onClick={handleExport}>
                 <Download size={16} />
-                <span className="hidden sm:inline ml-2">Export</span>
+                <span className="hidden sm:inline ml-2">{t.app.export}</span>
               </Button>
             </div>
           </div>
@@ -230,11 +248,11 @@ function App() {
                 <TabsList className="grid w-full grid-cols-2 mb-4">
                   <TabsTrigger value="element" className="gap-2">
                     <Atom size={18} />
-                    Elements & Alloys
+                    {t.app.elementsAlloys}
                   </TabsTrigger>
                   <TabsTrigger value="polymer" className="gap-2">
                     <Drop size={18} />
-                    Polymers
+                    {t.app.polymers}
                   </TabsTrigger>
                 </TabsList>
 
@@ -243,11 +261,11 @@ function App() {
                     <TabsList className="grid w-full grid-cols-2">
                       <TabsTrigger value="periodic" className="gap-2">
                         <Atom size={18} />
-                        Periodic Table
+                        {t.app.periodicTable}
                       </TabsTrigger>
                       <TabsTrigger value="database" className="gap-2">
                         <Database size={18} />
-                        Material Database
+                        {t.app.materialDatabase}
                       </TabsTrigger>
                     </TabsList>
 
@@ -287,13 +305,13 @@ function App() {
             <Card className="p-6 space-y-4">
               <div className="flex items-center gap-2">
                 <Flask size={24} className="text-primary" />
-                <h2 className="text-lg font-semibold">Material Builder</h2>
+                <h2 className="text-lg font-semibold">{t.app.materialBuilder}</h2>
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium">Material Name</label>
+                <label className="text-sm font-medium">{t.app.materialName}</label>
                 <Input
-                  placeholder="Enter material name..."
+                  placeholder={t.app.enterMaterialName}
                   value={materialName}
                   onChange={(e) => setMaterialName(e.target.value)}
                 />
@@ -304,7 +322,7 @@ function App() {
                   <Badge variant="secondary">{currentMaterial.category}</Badge>
                   {currentMaterial.properties.confidence && (
                     <Badge variant="outline">
-                      {(currentMaterial.properties.confidence * 100).toFixed(0)}% Confidence
+                      {(currentMaterial.properties.confidence * 100).toFixed(0)}% {t.app.confidence}
                     </Badge>
                   )}
                 </div>
@@ -324,7 +342,7 @@ function App() {
                       onClick={handleSaveMaterial}
                       disabled={!properties}
                     >
-                      Save Material
+                      {t.app.saveMaterial}
                     </Button>
                   </>
                 )}
@@ -336,7 +354,7 @@ function App() {
                     onClick={handleSaveMaterial}
                     disabled={!properties}
                   >
-                    Save Polymer
+                    {t.app.savePolymer}
                   </Button>
                 )}
               </div>
@@ -387,7 +405,7 @@ function App() {
         {savedMaterials && savedMaterials.length > 0 && (
           <div className="mt-12">
             <Card className="p-6">
-              <h2 className="text-lg font-semibold mb-4">Saved Materials ({savedMaterials.length})</h2>
+              <h2 className="text-lg font-semibold mb-4">{t.app.savedMaterials} ({savedMaterials.length})</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {savedMaterials.map((material) => (
                   <Card
@@ -423,7 +441,7 @@ function App() {
                             handleSelectMaterial(material)
                           }}
                         >
-                          Edit
+                          {t.app.edit}
                         </Button>
                         <Button 
                           size="sm" 
@@ -439,7 +457,7 @@ function App() {
                           }}
                         >
                           <ChartLine size={14} />
-                          Results
+                          {t.app.results}
                         </Button>
                       </div>
                     </div>
