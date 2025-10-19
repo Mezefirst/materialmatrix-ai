@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useKV } from '@github/spark/hooks'
-import { Material, Composition, MaterialProperties, OptimizationResult } from '@/lib/types'
+import { Material, Composition, MaterialProperties, OptimizationResult, Monomer, ThermalProperties } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,10 @@ import { PropertyDisplay } from '@/components/PropertyDisplay'
 import { MaterialBrowser } from '@/components/MaterialBrowser'
 import { SimulationControls } from '@/components/SimulationControls'
 import { OptimizationDialog } from '@/components/OptimizationDialog'
-import { Atom, Database, Flask, Plus, Download } from '@phosphor-icons/react'
+import { MonomerSelector } from '@/components/MonomerSelector'
+import { PolymerBuilder } from '@/components/PolymerBuilder'
+import { ThermalPropertyDisplay } from '@/components/ThermalPropertyDisplay'
+import { Atom, Database, Flask, Plus, Download, Drop } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 function App() {
@@ -21,7 +24,10 @@ function App() {
   const [currentMaterial, setCurrentMaterial] = useState<Material | null>(null)
   const [composition, setComposition] = useState<Composition>({})
   const [properties, setProperties] = useState<MaterialProperties | null>(null)
+  const [thermalProperties, setThermalProperties] = useState<ThermalProperties | null>(null)
   const [materialName, setMaterialName] = useState('')
+  const [materialMode, setMaterialMode] = useState<'element' | 'polymer'>('element')
+  const [selectedMonomers, setSelectedMonomers] = useState<Monomer[]>([])
 
   const handleElementToggle = (symbol: string) => {
     if (symbol in composition) {
@@ -90,8 +96,31 @@ function App() {
     setCurrentMaterial(null)
     setComposition({})
     setProperties(null)
+    setThermalProperties(null)
     setMaterialName('')
+    setSelectedMonomers([])
     toast.info('Started new material')
+  }
+
+  const handleToggleMonomer = (monomer: Monomer) => {
+    setSelectedMonomers(current => {
+      const exists = current.find(m => m.id === monomer.id)
+      if (exists) {
+        return current.filter(m => m.id !== monomer.id)
+      } else {
+        if (current.length >= 5) {
+          toast.error('Maximum 5 monomers allowed')
+          return current
+        }
+        return [...current, monomer]
+      }
+    })
+  }
+
+  const handlePolymerPropertiesPredict = (props: MaterialProperties & { thermal: ThermalProperties }) => {
+    const { thermal, ...materialProps } = props
+    setProperties(materialProps)
+    setThermalProperties(thermal)
   }
 
   const handleExport = () => {
@@ -151,38 +180,62 @@ function App() {
       <main className="container mx-auto px-4 sm:px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <Tabs defaultValue="periodic" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="periodic" className="gap-2">
-                  <Atom size={18} />
-                  Periodic Table
-                </TabsTrigger>
-                <TabsTrigger value="database" className="gap-2">
-                  <Database size={18} />
-                  Material Database
-                </TabsTrigger>
-              </TabsList>
+            <Card className="p-2">
+              <Tabs value={materialMode} onValueChange={(v) => setMaterialMode(v as 'element' | 'polymer')}>
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="element" className="gap-2">
+                    <Atom size={18} />
+                    Elements & Alloys
+                  </TabsTrigger>
+                  <TabsTrigger value="polymer" className="gap-2">
+                    <Drop size={18} />
+                    Polymers
+                  </TabsTrigger>
+                </TabsList>
 
-              <TabsContent value="periodic" className="space-y-6 mt-6">
-                <PeriodicTable
-                  selectedElements={composition}
-                  onElementToggle={handleElementToggle}
-                />
-              </TabsContent>
+                <TabsContent value="element" className="space-y-6">
+                  <Tabs defaultValue="periodic" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="periodic" className="gap-2">
+                        <Atom size={18} />
+                        Periodic Table
+                      </TabsTrigger>
+                      <TabsTrigger value="database" className="gap-2">
+                        <Database size={18} />
+                        Material Database
+                      </TabsTrigger>
+                    </TabsList>
 
-              <TabsContent value="database" className="space-y-6 mt-6">
-                <MaterialBrowser onSelectMaterial={handleSelectMaterial} />
-              </TabsContent>
-            </Tabs>
+                    <TabsContent value="periodic" className="space-y-6 mt-6">
+                      <PeriodicTable
+                        selectedElements={composition}
+                        onElementToggle={handleElementToggle}
+                      />
+                    </TabsContent>
 
-            {Object.keys(composition).length > 0 && (
-              <div className="space-y-6">
-                <CompositionEditor
-                  composition={composition}
-                  onChange={setComposition}
-                />
-              </div>
-            )}
+                    <TabsContent value="database" className="space-y-6 mt-6">
+                      <MaterialBrowser onSelectMaterial={handleSelectMaterial} />
+                    </TabsContent>
+                  </Tabs>
+
+                  {Object.keys(composition).length > 0 && (
+                    <div className="space-y-6">
+                      <CompositionEditor
+                        composition={composition}
+                        onChange={setComposition}
+                      />
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="polymer" className="space-y-6">
+                  <MonomerSelector
+                    selectedMonomers={selectedMonomers}
+                    onToggleMonomer={handleToggleMonomer}
+                  />
+                </TabsContent>
+              </Tabs>
+            </Card>
           </div>
 
           <div className="space-y-6">
@@ -213,34 +266,60 @@ function App() {
               )}
 
               <div className="pt-4 border-t space-y-3">
-                <OptimizationDialog
-                  targetProperties={properties || undefined}
-                  onSelectResult={handleOptimizationResult}
-                />
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full"
-                  onClick={handleSaveMaterial}
-                  disabled={!properties}
-                >
-                  Save Material
-                </Button>
+                {materialMode === 'element' && (
+                  <>
+                    <OptimizationDialog
+                      targetProperties={properties || undefined}
+                      onSelectResult={handleOptimizationResult}
+                    />
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="w-full"
+                      onClick={handleSaveMaterial}
+                      disabled={!properties}
+                    >
+                      Save Material
+                    </Button>
+                  </>
+                )}
+                {materialMode === 'polymer' && (
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full"
+                    onClick={handleSaveMaterial}
+                    disabled={!properties}
+                  >
+                    Save Polymer
+                  </Button>
+                )}
               </div>
             </Card>
 
-            {Object.keys(composition).length > 0 && (
+            {materialMode === 'element' && Object.keys(composition).length > 0 && (
               <SimulationControls
                 composition={composition}
                 onPropertiesPredict={setProperties}
+              />
+            )}
+
+            {materialMode === 'polymer' && selectedMonomers.length > 0 && (
+              <PolymerBuilder
+                selectedMonomers={selectedMonomers}
+                onPropertiesPredict={handlePolymerPropertiesPredict}
+                onCompositionChange={setComposition}
               />
             )}
           </div>
         </div>
 
         {properties && (
-          <div className="mt-8">
+          <div className="mt-8 space-y-6">
             <PropertyDisplay properties={properties} />
+            {thermalProperties && materialMode === 'polymer' && (
+              <ThermalPropertyDisplay properties={thermalProperties} />
+            )}
           </div>
         )}
 

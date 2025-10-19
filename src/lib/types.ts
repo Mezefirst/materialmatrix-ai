@@ -104,3 +104,105 @@ export interface OptimizationResult {
   score: number
   tradeoffs: OptimizationObjectives
 }
+
+export interface Monomer {
+  id: string
+  name: string
+  structure: string
+  smiles?: string
+  functionalGroups: FunctionalGroup[]
+  molecularWeight: number
+  reactivity: number
+  category: MonomerCategory
+  composition: Composition
+  properties: MonomerProperties
+}
+
+export type MonomerCategory = 
+  | 'vinyl'
+  | 'diene'
+  | 'styrenic'
+  | 'acrylic'
+  | 'methacrylate'
+  | 'epoxy'
+  | 'urethane'
+  | 'ester'
+  | 'amide'
+  | 'ether'
+  | 'siloxane'
+  | 'other'
+
+export type FunctionalGroup =
+  | 'vinyl'
+  | 'hydroxyl'
+  | 'carboxyl'
+  | 'amine'
+  | 'epoxide'
+  | 'ester'
+  | 'amide'
+  | 'ether'
+  | 'isocyanate'
+  | 'thiol'
+  | 'aromatic'
+
+export interface MonomerProperties {
+  polymerizationType: PolymerizationType[]
+  glassTransitionTemp?: number
+  reactivityIndex: number
+  toxicity?: ToxicityLevel
+}
+
+export type PolymerizationType = 
+  | 'addition'
+  | 'condensation'
+  | 'ring-opening'
+  | 'radical'
+  | 'ionic'
+  | 'step-growth'
+
+export type ToxicityLevel = 'low' | 'moderate' | 'high'
+
+export interface PolymerComposition {
+  monomers: PolymerMonomerUnit[]
+  architecture: PolymerArchitecture
+  crosslinking?: number
+  molecularWeight?: number
+  polydispersity?: number
+}
+
+export interface PolymerMonomerUnit {
+  monomerId: string
+  monomerName: string
+  moleFraction: number
+  distribution?: 'random' | 'alternating' | 'block' | 'graft'
+}
+
+export type PolymerArchitecture = 
+  | 'linear'
+  | 'branched'
+  | 'star'
+  | 'comb'
+  | 'dendritic'
+  | 'network'
+
+export interface Polymer extends Omit<Material, 'composition'> {
+  polymerComposition: PolymerComposition
+  processingMethod?: PolymerizationMethod
+  thermalProperties: ThermalProperties
+}
+
+export type PolymerizationMethod =
+  | 'free-radical'
+  | 'anionic'
+  | 'cationic'
+  | 'coordination'
+  | 'step-growth'
+  | 'ring-opening'
+
+export interface ThermalProperties {
+  glassTransitionTemp?: number
+  meltingTemp?: number
+  decompositionTemp?: number
+  thermalConductivity?: number
+  heatCapacity?: number
+}

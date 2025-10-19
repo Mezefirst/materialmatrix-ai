@@ -299,5 +299,191 @@ export const materialsDatabase: Material[] = [
     },
     createdAt: Date.now(),
     modifiedAt: Date.now()
+  },
+  {
+    id: 'polyethylene-hdpe',
+    name: 'High-Density Polyethylene (HDPE)',
+    composition: { C: 85.7, H: 14.3 },
+    category: 'polymer',
+    description: 'Linear polymer with high crystallinity and strength',
+    properties: {
+      mechanical: {
+        tensileStrength: 32,
+        yieldStrength: 26,
+        elasticity: 1.1,
+        hardness: 65,
+        density: 0.95,
+        toughness: 42
+      },
+      electrical: {
+        conductivity: 1e-15,
+        resistivity: 1e15,
+        dielectricConstant: 2.3
+      },
+      chemical: {
+        corrosionResistance: 88,
+        reactivity: 12,
+        stability: 85,
+        oxidationResistance: 78
+      },
+      confidence: 0.96
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
+  },
+  {
+    id: 'polystyrene',
+    name: 'Polystyrene (PS)',
+    composition: { C: 92.3, H: 7.7 },
+    category: 'polymer',
+    description: 'Rigid thermoplastic with excellent clarity',
+    properties: {
+      mechanical: {
+        tensileStrength: 45,
+        yieldStrength: 35,
+        elasticity: 3.2,
+        hardness: 75,
+        density: 1.05,
+        toughness: 28
+      },
+      electrical: {
+        conductivity: 1e-16,
+        resistivity: 1e16,
+        dielectricConstant: 2.6
+      },
+      chemical: {
+        corrosionResistance: 65,
+        reactivity: 22,
+        stability: 75,
+        oxidationResistance: 68
+      },
+      confidence: 0.94
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
+  },
+  {
+    id: 'pvc',
+    name: 'Polyvinyl Chloride (PVC)',
+    composition: { C: 38.4, H: 4.8, Cl: 56.8 },
+    category: 'polymer',
+    description: 'Versatile polymer with flame resistance',
+    properties: {
+      mechanical: {
+        tensileStrength: 52,
+        yieldStrength: 41,
+        elasticity: 2.8,
+        hardness: 80,
+        density: 1.38,
+        toughness: 35
+      },
+      electrical: {
+        conductivity: 1e-13,
+        resistivity: 1e13,
+        dielectricConstant: 3.2
+      },
+      chemical: {
+        corrosionResistance: 92,
+        reactivity: 15,
+        stability: 82,
+        oxidationResistance: 85
+      },
+      confidence: 0.95
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
+  },
+  {
+    id: 'pmma',
+    name: 'Polymethyl Methacrylate (PMMA)',
+    composition: { C: 59.98, H: 8.05, O: 31.97 },
+    category: 'polymer',
+    description: 'Transparent thermoplastic (acrylic glass)',
+    properties: {
+      mechanical: {
+        tensileStrength: 72,
+        yieldStrength: 55,
+        elasticity: 3.0,
+        hardness: 85,
+        density: 1.18,
+        toughness: 38
+      },
+      electrical: {
+        conductivity: 1e-14,
+        resistivity: 1e14,
+        dielectricConstant: 3.6
+      },
+      chemical: {
+        corrosionResistance: 72,
+        reactivity: 18,
+        stability: 80,
+        oxidationResistance: 75
+      },
+      confidence: 0.93
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
+  },
+  {
+    id: 'nylon-6',
+    name: 'Nylon 6 (Polyamide 6)',
+    composition: { C: 63.7, H: 9.8, N: 12.4, O: 14.1 },
+    category: 'polymer',
+    description: 'Engineering thermoplastic with high strength',
+    properties: {
+      mechanical: {
+        tensileStrength: 82,
+        yieldStrength: 65,
+        elasticity: 2.5,
+        hardness: 78,
+        density: 1.14,
+        toughness: 68
+      },
+      electrical: {
+        conductivity: 1e-12,
+        resistivity: 1e12,
+        dielectricConstant: 4.0
+      },
+      chemical: {
+        corrosionResistance: 68,
+        reactivity: 25,
+        stability: 75,
+        oxidationResistance: 65
+      },
+      confidence: 0.92
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
+  },
+  {
+    id: 'ptfe',
+    name: 'Polytetrafluoroethylene (PTFE/Teflon)',
+    composition: { C: 24.0, F: 76.0 },
+    category: 'polymer',
+    description: 'Highly chemically resistant fluoropolymer',
+    properties: {
+      mechanical: {
+        tensileStrength: 28,
+        yieldStrength: 23,
+        elasticity: 0.5,
+        hardness: 55,
+        density: 2.2,
+        toughness: 25
+      },
+      electrical: {
+        conductivity: 1e-17,
+        resistivity: 1e17,
+        dielectricConstant: 2.1
+      },
+      chemical: {
+        corrosionResistance: 99,
+        reactivity: 5,
+        stability: 98,
+        oxidationResistance: 99
+      },
+      confidence: 0.97
+    },
+    createdAt: Date.now(),
+    modifiedAt: Date.now()
   }
 ]

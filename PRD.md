@@ -12,6 +12,13 @@ A progressive web application that empowers materials scientists, engineers, and
 
 ## Essential Features
 
+### Polymer Development from Monomers
+- **Functionality**: Select monomers from a comprehensive library to design custom polymers with controlled composition, architecture, and crosslinking
+- **Purpose**: Enable polymer chemists and materials scientists to rapidly prototype and optimize polymer materials without extensive lab work
+- **Trigger**: User switches to "Polymers" tab and selects monomers from categorized library
+- **Progression**: Browse monomer library → Select 1-5 monomers → Adjust mole fractions → Choose polymer architecture (linear, branched, network, etc.) → Set crosslinking density → Simulate polymer properties → View thermal, mechanical, electrical properties
+- **Success criteria**: Users can combine monomers with compatibility validation, predict polymer properties including glass transition temperature, visualize thermal behavior, and save polymer formulations
+
 ### Interactive Periodic Table Selector
 - **Functionality**: Visual periodic table interface for element selection with click-to-add composition building
 - **Purpose**: Primary input mechanism for custom material creation; makes complex chemistry accessible
