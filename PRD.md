@@ -12,6 +12,13 @@ A progressive web application that empowers materials scientists, engineers, and
 
 ## Essential Features
 
+### Dedicated Results & Analysis Page
+- **Functionality**: Comprehensive analysis view accessible via "View Results" button, displaying detailed material simulation results in a clean, organized layout with tabbed property sections, performance scores, sustainability metrics, cost analysis, and composition breakdown
+- **Purpose**: Provide users with a focused, distraction-free environment to review and analyze simulation results without builder UI clutter; enable easy navigation between multiple saved material results
+- **Trigger**: User clicks "View Results" button after running simulation, or clicks "Results" button on any saved material card
+- **Progression**: Complete simulation → Click "View Results" → View comprehensive results page with composition breakdown, performance scores, sustainability analysis, cost breakdown → Navigate between tabbed property sections (Mechanical, Electrical, Chemical, Thermal) → Return to builder with "Back" button
+- **Success criteria**: Clear navigation between builder and results views, all property data displayed with visual progress bars and scores, sustainability and cost metrics prominently featured, ability to view results for any saved material, seamless back navigation preserving builder state
+
 ### Sustainability & Cost Analysis
 - **Functionality**: Comprehensive environmental impact and economic feasibility assessment for every material composition, including overall sustainability score, recyclability rating, carbon footprint, toxicity levels, material abundance, estimated cost per kilogram, processing cost complexity, supply chain availability, and market price stability
 - **Purpose**: Enable responsible material selection that balances performance, environmental impact, and economic constraints; help users make informed decisions considering the full lifecycle and real-world viability of materials

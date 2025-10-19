@@ -20,7 +20,8 @@ import { RecommendationPanel } from '@/components/RecommendationPanel'
 import { PropertyTargetDialog } from '@/components/PropertyTargetDialog'
 import { CompositionAnalysis } from '@/components/CompositionAnalysis'
 import { SustainabilityCostSummary } from '@/components/SustainabilityCostSummary'
-import { Atom, Database, Flask, Plus, Download, Drop } from '@phosphor-icons/react'
+import { ResultsPage } from '@/components/ResultsPage'
+import { Atom, Database, Flask, Plus, Download, Drop, ChartLine } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
   const [materialName, setMaterialName] = useState('')
   const [materialMode, setMaterialMode] = useState<'element' | 'polymer'>('element')
   const [selectedMonomers, setSelectedMonomers] = useState<Monomer[]>([])
+  const [viewMode, setViewMode] = useState<'builder' | 'results'>('builder')
 
   const handleElementToggle = (symbol: string) => {
     if (symbol in composition) {
@@ -61,6 +63,7 @@ function App() {
     setComposition(material.composition)
     setProperties(material.properties)
     setMaterialName(material.name)
+    setViewMode('builder')
     toast.success(`Loaded ${material.name}`)
   }
 
@@ -103,6 +106,7 @@ function App() {
     setThermalProperties(null)
     setMaterialName('')
     setSelectedMonomers([])
+    setViewMode('builder')
     toast.info('Started new material')
   }
 
@@ -155,6 +159,30 @@ function App() {
     toast.success('Material exported!')
   }
 
+  const handleViewResults = () => {
+    if (!properties) {
+      toast.error('Run simulation first to view results')
+      return
+    }
+    setViewMode('results')
+  }
+
+  if (viewMode === 'results') {
+    return (
+      <>
+        <Toaster />
+        <ResultsPage
+          material={currentMaterial}
+          composition={composition}
+          properties={properties}
+          thermalProperties={thermalProperties}
+          materialName={materialName}
+          onBack={() => setViewMode('builder')}
+        />
+      </>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Toaster />
@@ -175,6 +203,12 @@ function App() {
             </div>
             <div className="flex items-center gap-2">
               <PropertyTargetDialog onApplyComposition={setComposition} />
+              {properties && (
+                <Button variant="default" size="sm" onClick={handleViewResults}>
+                  <ChartLine size={16} />
+                  <span className="hidden sm:inline ml-2">View Results</span>
+                </Button>
+              )}
               <Button variant="outline" size="sm" onClick={handleNewMaterial}>
                 <Plus size={16} />
                 <span className="hidden sm:inline ml-2">New</span>
@@ -358,10 +392,9 @@ function App() {
                 {savedMaterials.map((material) => (
                   <Card
                     key={material.id}
-                    className="p-4 hover:shadow-lg transition-shadow cursor-pointer"
-                    onClick={() => handleSelectMaterial(material)}
+                    className="p-4 hover:shadow-lg transition-all cursor-pointer group"
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="font-semibold text-sm">{material.name}</h3>
                         <Badge variant="secondary" className="text-xs shrink-0">
@@ -379,6 +412,35 @@ function App() {
                             +{Object.keys(material.composition).length - 4}
                           </Badge>
                         )}
+                      </div>
+                      <div className="flex gap-2 pt-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="flex-1"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleSelectMaterial(material)
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="default" 
+                          className="flex-1 gap-1"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setCurrentMaterial(material)
+                            setComposition(material.composition)
+                            setProperties(material.properties)
+                            setMaterialName(material.name)
+                            setViewMode('results')
+                          }}
+                        >
+                          <ChartLine size={14} />
+                          Results
+                        </Button>
                       </div>
                     </div>
                   </Card>
