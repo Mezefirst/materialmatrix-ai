@@ -16,6 +16,9 @@ import { OptimizationDialog } from '@/components/OptimizationDialog'
 import { MonomerSelector } from '@/components/MonomerSelector'
 import { PolymerBuilder } from '@/components/PolymerBuilder'
 import { ThermalPropertyDisplay } from '@/components/ThermalPropertyDisplay'
+import { RecommendationPanel } from '@/components/RecommendationPanel'
+import { PropertyTargetDialog } from '@/components/PropertyTargetDialog'
+import { CompositionAnalysis } from '@/components/CompositionAnalysis'
 import { Atom, Database, Flask, Plus, Download, Drop } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -123,6 +126,12 @@ function App() {
     setThermalProperties(thermal)
   }
 
+  const handleApplyRecommendation = (newComposition: Composition) => {
+    setComposition(newComposition)
+    setProperties(null)
+    setThermalProperties(null)
+  }
+
   const handleExport = () => {
     if (!currentMaterial && !properties) {
       toast.error('No material to export')
@@ -164,6 +173,7 @@ function App() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <PropertyTargetDialog onApplyComposition={setComposition} />
               <Button variant="outline" size="sm" onClick={handleNewMaterial}>
                 <Plus size={16} />
                 <span className="hidden sm:inline ml-2">New</span>
@@ -319,6 +329,21 @@ function App() {
             <PropertyDisplay properties={properties} />
             {thermalProperties && materialMode === 'polymer' && (
               <ThermalPropertyDisplay properties={thermalProperties} />
+            )}
+            
+            {materialMode === 'element' && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <CompositionAnalysis
+                  composition={composition}
+                  properties={properties}
+                  onApplyModification={handleApplyRecommendation}
+                />
+                <RecommendationPanel
+                  targetProperties={properties}
+                  currentComposition={composition}
+                  onApplyRecommendation={handleApplyRecommendation}
+                />
+              </div>
             )}
           </div>
         )}

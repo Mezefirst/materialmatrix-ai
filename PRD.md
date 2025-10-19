@@ -12,6 +12,27 @@ A progressive web application that empowers materials scientists, engineers, and
 
 ## Essential Features
 
+### AI-Powered Composition Recommendations
+- **Functionality**: Intelligent suggestions for modifying material composition to improve properties, including rationale, expected improvements, and trade-offs
+- **Purpose**: Guide users to better material designs by leveraging materials science knowledge and best practices
+- **Trigger**: After simulating properties, user clicks "Get Recommendations" in the recommendation panel
+- **Progression**: Simulate material properties → Click "Get Recommendations" → View 3-5 AI-generated suggestions → Review composition changes and rationale → Apply suggested composition → Re-simulate to verify improvements
+- **Success criteria**: Recommendations explain scientific reasoning, show expected property improvements, note trade-offs, and users can apply suggestions with one click
+
+### Property-Based Material Search
+- **Functionality**: Find material compositions by specifying target property values (e.g., "tensile strength > 500 MPa")
+- **Purpose**: Enable goal-oriented material design where users start with performance requirements rather than composition
+- **Trigger**: User clicks "Find by Property" button in header
+- **Progression**: Select property category (mechanical/electrical/chemical) → Choose specific property → Enter target value → Generate suggestions → Review 3 material options → Apply chosen composition
+- **Success criteria**: Users can specify any property target, receive scientifically valid compositions, understand why each suggestion meets the target
+
+### Composition Analysis & Quick Fixes
+- **Functionality**: Analyze current composition for issues and provide targeted micro-adjustments to improve properties
+- **Purpose**: Help users identify and fix composition problems with specific, actionable modifications
+- **Trigger**: After simulating properties, user clicks "Analyze Composition"
+- **Progression**: Simulate properties → Analyze composition → View identified issues → Review quick improvement suggestions → Apply individual modifications → Re-simulate to confirm
+- **Success criteria**: Identifies incompatibilities and inefficiencies, suggests small changes (add/remove/adjust elements), explains expected effect of each change
+
 ### Polymer Development from Monomers
 - **Functionality**: Select monomers from a comprehensive library to design custom polymers with controlled composition, architecture, and crosslinking
 - **Purpose**: Enable polymer chemists and materials scientists to rapidly prototype and optimize polymer materials without extensive lab work
