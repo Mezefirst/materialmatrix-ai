@@ -13,30 +13,39 @@ interface LandingPageProps {
 export function LandingPage({ onEnter }: LandingPageProps) {
   const { language, setLanguage, t, isRTL } = useLanguage()
 
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features-section')
+    featuresSection?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   const features = [
     {
       icon: Sparkle,
       title: t.landing.features.aiPrediction.title,
       description: t.landing.features.aiPrediction.description,
-      color: 'from-accent to-primary'
+      color: 'from-accent to-primary',
+      action: onEnter
     },
     {
       icon: ChartLine,
       title: t.landing.features.optimization.title,
       description: t.landing.features.optimization.description,
-      color: 'from-primary to-accent'
+      color: 'from-primary to-accent',
+      action: onEnter
     },
     {
       icon: Leaf,
       title: t.landing.features.sustainability.title,
       description: t.landing.features.sustainability.description,
-      color: 'from-success to-primary'
+      color: 'from-success to-primary',
+      action: onEnter
     },
     {
       icon: Drop,
       title: t.landing.features.polymer.title,
       description: t.landing.features.polymer.description,
-      color: 'from-accent to-success'
+      color: 'from-accent to-success',
+      action: onEnter
     }
   ]
 
@@ -100,7 +109,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
                   {t.landing.cta.getStarted}
                   <ArrowRight size={20} />
                 </Button>
-                <Button size="lg" variant="outline" className="gap-2 text-base px-8">
+                <Button size="lg" variant="outline" className="gap-2 text-base px-8" onClick={scrollToFeatures}>
                   <Flask size={20} />
                   {t.landing.cta.learnMore}
                 </Button>
@@ -127,7 +136,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
           </div>
         </section>
 
-        <section className="py-20 sm:py-32 bg-muted/30">
+        <section id="features-section" className="py-20 sm:py-32 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -153,7 +162,10 @@ export function LandingPage({ onEnter }: LandingPageProps) {
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <Card className="p-8 h-full hover:shadow-xl transition-all border-2 hover:border-primary/30 group">
+                  <Card 
+                    className="p-8 h-full hover:shadow-xl transition-all border-2 hover:border-primary/30 group cursor-pointer"
+                    onClick={feature.action}
+                  >
                     <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                       <feature.icon size={28} className="text-white" weight="fill" />
                     </div>
@@ -194,7 +206,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
                     <Flask size={20} />
                     {t.landing.cta.getStarted}
                   </Button>
-                  <Button size="lg" variant="outline" className="gap-2 text-base px-8">
+                  <Button size="lg" variant="outline" className="gap-2 text-base px-8" onClick={scrollToFeatures}>
                     <Database size={20} />
                     {t.nav.features}
                   </Button>
