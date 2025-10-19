@@ -9,7 +9,7 @@ interface PropertyDisplayProps {
 }
 
 export function PropertyDisplay({ properties }: PropertyDisplayProps) {
-  const { mechanical, electrical, chemical, confidence } = properties
+  const { mechanical, electrical, chemical, sustainability, cost, confidence } = properties
 
   return (
     <div className="space-y-6">
@@ -23,10 +23,12 @@ export function PropertyDisplay({ properties }: PropertyDisplayProps) {
       </div>
 
       <Tabs defaultValue="mechanical" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="mechanical">Mechanical</TabsTrigger>
           <TabsTrigger value="electrical">Electrical</TabsTrigger>
           <TabsTrigger value="chemical">Chemical</TabsTrigger>
+          <TabsTrigger value="sustainability">Sustainability</TabsTrigger>
+          <TabsTrigger value="cost">Cost</TabsTrigger>
         </TabsList>
 
         <TabsContent value="mechanical" className="space-y-4">
@@ -160,6 +162,133 @@ export function PropertyDisplay({ properties }: PropertyDisplayProps) {
                 />
               )}
             </div>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="sustainability" className="space-y-4">
+          <Card className="p-6">
+            {sustainability ? (
+              <div className="space-y-6">
+                {sustainability.overallScore !== undefined && (
+                  <div className="pb-4 border-b">
+                    <PropertyItem
+                      label="Overall Sustainability Score"
+                      value={sustainability.overallScore}
+                      unit="/100"
+                      max={100}
+                    />
+                  </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {sustainability.recyclability !== undefined && (
+                    <PropertyItem
+                      label="Recyclability"
+                      value={sustainability.recyclability}
+                      unit="/100"
+                      max={100}
+                    />
+                  )}
+                  {sustainability.carbonFootprint !== undefined && (
+                    <PropertyItem
+                      label="Carbon Footprint"
+                      value={sustainability.carbonFootprint}
+                      unit="/100"
+                      max={100}
+                      inverted
+                    />
+                  )}
+                  {sustainability.toxicity !== undefined && (
+                    <PropertyItem
+                      label="Toxicity"
+                      value={sustainability.toxicity}
+                      unit="/100"
+                      max={100}
+                      inverted
+                    />
+                  )}
+                  {sustainability.abundance !== undefined && (
+                    <PropertyItem
+                      label="Material Abundance"
+                      value={sustainability.abundance}
+                      unit="/100"
+                      max={100}
+                    />
+                  )}
+                  {sustainability.environmentalImpact !== undefined && (
+                    <PropertyItem
+                      label="Environmental Impact"
+                      value={sustainability.environmentalImpact}
+                      unit="/100"
+                      max={100}
+                      inverted
+                    />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-muted-foreground py-8">
+                No sustainability data available
+              </div>
+            )}
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="cost" className="space-y-4">
+          <Card className="p-6">
+            {cost ? (
+              <div className="space-y-6">
+                {cost.estimatedCost !== undefined && (
+                  <div className="pb-4 border-b">
+                    <PropertyItem
+                      label="Estimated Cost Score"
+                      value={cost.estimatedCost}
+                      unit="/100"
+                      max={100}
+                      inverted
+                    />
+                  </div>
+                )}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {cost.costPerKg !== undefined && (
+                    <PropertyItem
+                      label="Cost Per Kilogram"
+                      value={cost.costPerKg}
+                      unit="USD/kg"
+                      max={1000}
+                    />
+                  )}
+                  {cost.processingCost !== undefined && (
+                    <PropertyItem
+                      label="Processing Cost"
+                      value={cost.processingCost}
+                      unit="/100"
+                      max={100}
+                      inverted
+                    />
+                  )}
+                  {cost.availability !== undefined && (
+                    <PropertyItem
+                      label="Material Availability"
+                      value={cost.availability}
+                      unit="/100"
+                      max={100}
+                    />
+                  )}
+                  {cost.marketStability !== undefined && (
+                    <PropertyItem
+                      label="Market Stability"
+                      value={cost.marketStability}
+                      unit="/100"
+                      max={100}
+                    />
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center text-muted-foreground py-8">
+                No cost data available
+              </div>
+            )}
           </Card>
         </TabsContent>
       </Tabs>

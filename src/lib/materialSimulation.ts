@@ -38,6 +38,28 @@ Chemical Properties:
 - Stability (score 0-100)
 - Oxidation Resistance (score 0-100)
 
+Sustainability Metrics:
+- Overall Sustainability Score (0-100, higher is better)
+- Recyclability (0-100, ease of recycling)
+- Carbon Footprint (0-100, lower is better - production emissions)
+- Toxicity (0-100, lower is better - environmental/health impact)
+- Abundance (0-100, availability in earth's crust)
+- Environmental Impact (0-100, lower is better - overall ecological footprint)
+
+Cost Metrics:
+- Estimated Cost (0-100, relative cost score, lower is cheaper)
+- Cost Per Kg (USD/kg, realistic market price)
+- Processing Cost (0-100, complexity and energy requirements)
+- Availability (0-100, supply chain reliability)
+- Market Stability (0-100, price volatility - higher is more stable)
+
+Consider:
+- Rare earth elements (La, Ce, Nd, etc.) are expensive and have moderate environmental impact
+- Precious metals (Au, Pt, Ag) are very expensive but recyclable
+- Common metals (Fe, Al, Cu) are cheap and relatively sustainable
+- Reactive metals (Li, Na, K) have higher processing costs
+- Heavy metals (Pb, Hg, Cd) have high toxicity scores
+
 Also provide a confidence score (0-1) for the prediction.
 
 Return ONLY a valid JSON object with this structure (no additional text):
@@ -61,6 +83,21 @@ Return ONLY a valid JSON object with this structure (no additional text):
     "reactivity": number,
     "stability": number,
     "oxidationResistance": number
+  },
+  "sustainability": {
+    "overallScore": number,
+    "recyclability": number,
+    "carbonFootprint": number,
+    "toxicity": number,
+    "abundance": number,
+    "environmentalImpact": number
+  },
+  "cost": {
+    "estimatedCost": number,
+    "costPerKg": number,
+    "processingCost": number,
+    "availability": number,
+    "marketStability": number
   },
   "confidence": number
 }`

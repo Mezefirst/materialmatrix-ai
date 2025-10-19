@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Lightbulb, Sparkle, TrendUp, ArrowRight, CheckCircle } from '@phosphor-icons/react'
+import { Lightbulb, Sparkle, TrendUp, ArrowRight, CheckCircle, Leaf, CurrencyDollar } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
 interface RecommendationPanelProps {
@@ -171,6 +171,23 @@ export function RecommendationPanel({
                       {rec.tradeoffs.join(', ')}
                     </AlertDescription>
                   </Alert>
+                )}
+
+                {(rec.sustainabilityImpact || rec.costImpact) && (
+                  <div className="flex flex-wrap gap-2">
+                    {rec.sustainabilityImpact && (
+                      <Badge variant="outline" className="gap-1.5 bg-success/5 border-success/20">
+                        <Leaf size={14} className="text-success" />
+                        <span className="text-xs">{rec.sustainabilityImpact}</span>
+                      </Badge>
+                    )}
+                    {rec.costImpact && (
+                      <Badge variant="outline" className="gap-1.5 bg-accent/5 border-accent/20">
+                        <CurrencyDollar size={14} className="text-accent" />
+                        <span className="text-xs">{rec.costImpact}</span>
+                      </Badge>
+                    )}
+                  </div>
                 )}
               </div>
 

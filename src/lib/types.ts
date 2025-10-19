@@ -52,6 +52,8 @@ export interface MaterialProperties {
   mechanical: MechanicalProperties
   electrical: ElectricalProperties
   chemical: ChemicalProperties
+  sustainability?: SustainabilityMetrics
+  cost?: CostMetrics
   confidence?: number
 }
 
@@ -76,6 +78,23 @@ export interface ChemicalProperties {
   reactivity?: number
   stability?: number
   oxidationResistance?: number
+}
+
+export interface SustainabilityMetrics {
+  overallScore?: number
+  recyclability?: number
+  carbonFootprint?: number
+  toxicity?: number
+  abundance?: number
+  environmentalImpact?: number
+}
+
+export interface CostMetrics {
+  estimatedCost?: number
+  costPerKg?: number
+  processingCost?: number
+  availability?: number
+  marketStability?: number
 }
 
 export interface ProcessingParameters {

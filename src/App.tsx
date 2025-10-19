@@ -19,6 +19,7 @@ import { ThermalPropertyDisplay } from '@/components/ThermalPropertyDisplay'
 import { RecommendationPanel } from '@/components/RecommendationPanel'
 import { PropertyTargetDialog } from '@/components/PropertyTargetDialog'
 import { CompositionAnalysis } from '@/components/CompositionAnalysis'
+import { SustainabilityCostSummary } from '@/components/SustainabilityCostSummary'
 import { Atom, Database, Flask, Plus, Download, Drop } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 
@@ -326,6 +327,7 @@ function App() {
 
         {properties && (
           <div className="mt-8 space-y-6">
+            <SustainabilityCostSummary properties={properties} />
             <PropertyDisplay properties={properties} />
             {thermalProperties && materialMode === 'polymer' && (
               <ThermalPropertyDisplay properties={thermalProperties} />

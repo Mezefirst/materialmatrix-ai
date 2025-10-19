@@ -8,6 +8,8 @@ export interface MaterialRecommendation {
   expectedImprovements: string[]
   tradeoffs?: string[]
   impact: 'high' | 'medium' | 'low'
+  sustainabilityImpact?: string
+  costImpact?: string
 }
 
 export async function generateRecommendations(
@@ -38,14 +40,24 @@ Each recommendation should:
 3. List expected improvements (specific property changes)
 4. Note any trade-offs (what might get worse)
 5. Categorize the impact as high/medium/low
+6. Consider sustainability and cost implications
 
 Consider:
 - Alloying effects (solid solution strengthening, precipitation hardening)
 - Electronic structure changes (band gap engineering, conductivity)
 - Grain refinement and microstructure
 - Corrosion resistance mechanisms
-- Cost and availability of elements
+- Cost and availability of elements (rare earths, precious metals vs common metals)
 - Processing feasibility
+- Sustainability factors (recyclability, toxicity, abundance, carbon footprint)
+- Environmental impact and toxicity
+- Market stability and supply chain reliability
+
+Provide recommendations that balance:
+- Performance improvements
+- Cost effectiveness (favor abundant, cheap elements like Fe, Al, Cu over rare/precious metals)
+- Sustainability (high recyclability, low toxicity, low carbon footprint)
+- Practical manufacturability
 
 Return ONLY a valid JSON object with a "recommendations" property containing an array (no additional text):
 {
@@ -53,8 +65,8 @@ Return ONLY a valid JSON object with a "recommendations" property containing an 
     {
       "name": "Descriptive name for the recommendation",
       "composition": {"symbol": percent, ...},
-      "category": "strength enhancement|conductivity|corrosion resistance|cost optimization|weight reduction|thermal stability|etc",
-      "rationale": "Detailed explanation of why this composition change works, including materials science principles",
+      "category": "strength enhancement|conductivity|corrosion resistance|cost optimization|weight reduction|thermal stability|sustainability|etc",
+      "rationale": "Detailed explanation of why this composition change works, including materials science principles, cost considerations, and sustainability benefits",
       "expectedImprovements": [
         "Specific property improvement 1",
         "Specific property improvement 2",
@@ -64,7 +76,9 @@ Return ONLY a valid JSON object with a "recommendations" property containing an 
         "Potential downside 1",
         "Potential downside 2"
       ],
-      "impact": "high|medium|low"
+      "impact": "high|medium|low",
+      "sustainabilityImpact": "Brief description of how this affects sustainability (e.g., 'Increases recyclability by 15%', 'Reduces carbon footprint', 'Uses more abundant materials')",
+      "costImpact": "Brief description of cost implications (e.g., 'Reduces cost by 30%', 'Slightly more expensive but justified by performance', 'Neutral cost impact')"
     }
   ]
 }`
@@ -104,6 +118,8 @@ For each suggestion:
 3. List the key material science principles at play
 4. Note any processing requirements
 5. Mention trade-offs
+6. Consider sustainability (recyclability, abundance, environmental impact)
+7. Consider cost (use common elements when possible, note if expensive elements are necessary)
 
 Return ONLY a valid JSON object with a "recommendations" property containing an array (no additional text):
 {
@@ -120,7 +136,9 @@ Return ONLY a valid JSON object with a "recommendations" property containing an 
       "tradeoffs": [
         "Potential limitation 1"
       ],
-      "impact": "high|medium|low"
+      "impact": "high|medium|low",
+      "sustainabilityImpact": "Description of sustainability considerations",
+      "costImpact": "Description of cost implications"
     }
   ]
 }`

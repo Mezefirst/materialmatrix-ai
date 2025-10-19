@@ -12,12 +12,21 @@ A progressive web application that empowers materials scientists, engineers, and
 
 ## Essential Features
 
+### Sustainability & Cost Analysis
+- **Functionality**: Comprehensive environmental impact and economic feasibility assessment for every material composition, including overall sustainability score, recyclability rating, carbon footprint, toxicity levels, material abundance, estimated cost per kilogram, processing cost complexity, supply chain availability, and market price stability
+- **Purpose**: Enable responsible material selection that balances performance, environmental impact, and economic constraints; help users make informed decisions considering the full lifecycle and real-world viability of materials
+- **Trigger**: Automatically calculated during property simulation and displayed prominently in results
+- **Progression**: Simulate properties → View sustainability score summary card → View cost analysis summary card → Navigate to detailed sustainability/cost tabs for in-depth metrics → Consider sustainability and cost in recommendations and optimization
+- **Success criteria**: Clear sustainability score (0-100 scale), realistic cost estimates based on element composition (rare earths/precious metals flagged as expensive), recyclability and toxicity ratings, carbon footprint assessment, all metrics influence AI recommendations to favor sustainable and cost-effective solutions
+
+## Essential Features
+
 ### AI-Powered Composition Recommendations
-- **Functionality**: Intelligent suggestions for modifying material composition to improve properties, including rationale, expected improvements, and trade-offs
-- **Purpose**: Guide users to better material designs by leveraging materials science knowledge and best practices
+- **Functionality**: Intelligent suggestions for modifying material composition to improve properties, including rationale, expected improvements, sustainability benefits, cost implications, and trade-offs
+- **Purpose**: Guide users to better material designs by leveraging materials science knowledge, cost considerations, and sustainability best practices
 - **Trigger**: After simulating properties, user clicks "Get Recommendations" in the recommendation panel
-- **Progression**: Simulate material properties → Click "Get Recommendations" → View 3-5 AI-generated suggestions → Review composition changes and rationale → Apply suggested composition → Re-simulate to verify improvements
-- **Success criteria**: Recommendations explain scientific reasoning, show expected property improvements, note trade-offs, and users can apply suggestions with one click
+- **Progression**: Simulate material properties → Click "Get Recommendations" → View 3-5 AI-generated suggestions → Review composition changes, sustainability improvements, and cost impacts → Apply suggested composition → Re-simulate to verify improvements
+- **Success criteria**: Recommendations explain scientific reasoning, show expected property improvements, note sustainability and cost implications, highlight trade-offs, and users can apply suggestions with one click
 
 ### Property-Based Material Search
 - **Functionality**: Find material compositions by specifying target property values (e.g., "tensile strength > 500 MPa")
@@ -55,11 +64,11 @@ A progressive web application that empowers materials scientists, engineers, and
 - **Success criteria**: Fast search results, accurate material data display, ability to modify and save variations
 
 ### AI Property Prediction Engine
-- **Functionality**: Predicts mechanical (tensile strength, elasticity, hardness), electrical (conductivity, resistivity, dielectric constant), and chemical properties (corrosion resistance, reactivity, stability)
-- **Purpose**: Core value proposition - instantly predict material behavior without expensive lab testing
+- **Functionality**: Predicts mechanical (tensile strength, elasticity, hardness), electrical (conductivity, resistivity, dielectric constant), chemical properties (corrosion resistance, reactivity, stability), sustainability metrics (recyclability, carbon footprint, toxicity, abundance), and cost analysis (material cost, processing cost, availability, market stability)
+- **Purpose**: Core value proposition - instantly predict material behavior, environmental impact, and economic feasibility without expensive lab testing
 - **Trigger**: User completes material composition and clicks "Simulate Properties"
-- **Progression**: Input composition → Select environmental conditions (temp, pressure, humidity) → Run AI simulation → Display predicted properties with confidence scores → Show property comparison charts
-- **Success criteria**: Predictions complete within 2-3 seconds, results shown with confidence intervals, clear visualization of property ranges
+- **Progression**: Input composition → Select environmental conditions (temp, pressure, humidity) → Run AI simulation → Display predicted properties with confidence scores → View sustainability and cost summaries → Show property comparison charts
+- **Success criteria**: Predictions complete within 2-3 seconds, results shown with confidence intervals, clear visualization of property ranges, sustainability score (0-100), and estimated cost metrics
 
 ### Multi-Objective Optimization
 - **Functionality**: Balance competing objectives (cost, performance, sustainability, availability, weight) to generate optimal material recommendations
