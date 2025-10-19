@@ -1,5 +1,289 @@
+import { useState, useEffect } from 'react'
+import { useKV } from '@github/spark/hooks'
+import { Material, Composition, MaterialProperties, OptimizationResult } from '@/lib/types'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Toaster } from '@/components/ui/sonner'
+import { PeriodicTable } from '@/components/PeriodicTable'
+import { CompositionEditor } from '@/components/CompositionEditor'
+import { PropertyDisplay } from '@/components/PropertyDisplay'
+import { MaterialBrowser } from '@/components/MaterialBrowser'
+import { SimulationControls } from '@/components/SimulationControls'
+import { OptimizationDialog } from '@/components/OptimizationDialog'
+import { Atom, Database, Flask, Plus, Download } from '@phosphor-icons/react'
+import { toast } from 'sonner'
+
 function App() {
-    return <div></div>
+  const [savedMaterials, setSavedMaterials] = useKV<Material[]>('saved-materials', [])
+  const [currentMaterial, setCurrentMaterial] = useState<Material | null>(null)
+  const [composition, setComposition] = useState<Composition>({})
+  const [properties, setProperties] = useState<MaterialProperties | null>(null)
+  const [materialName, setMaterialName] = useState('')
+
+  const handleElementToggle = (symbol: string) => {
+    if (symbol in composition) {
+      const newComposition = { ...composition }
+      delete newComposition[symbol]
+      setComposition(newComposition)
+    } else {
+      const elementCount = Object.keys(composition).length
+      if (elementCount >= 10) {
+        toast.error('Maximum 10 elements allowed')
+        return
+      }
+      const equalPercent = 100 / (elementCount + 1)
+      const newComposition: Composition = {}
+      
+      for (const existingSymbol of Object.keys(composition)) {
+        newComposition[existingSymbol] = equalPercent
+      }
+      newComposition[symbol] = equalPercent
+      
+      setComposition(newComposition)
+    }
+  }
+
+  const handleSelectMaterial = (material: Material) => {
+    setCurrentMaterial(material)
+    setComposition(material.composition)
+    setProperties(material.properties)
+    setMaterialName(material.name)
+    toast.success(`Loaded ${material.name}`)
+  }
+
+  const handleOptimizationResult = (result: OptimizationResult) => {
+    const material = result.material
+    setCurrentMaterial(material)
+    setComposition(material.composition)
+    setProperties(material.properties)
+    setMaterialName(material.name)
+  }
+
+  const handleSaveMaterial = () => {
+    if (!properties) {
+      toast.error('Simulate properties before saving')
+      return
+    }
+
+    const material: Material = {
+      id: `custom-${Date.now()}`,
+      name: materialName || `Material ${Date.now()}`,
+      composition,
+      category: 'other',
+      properties,
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
+    }
+
+    setSavedMaterials((current) => {
+      const existing = current || []
+      return [...existing, material]
+    })
+    setCurrentMaterial(material)
+    toast.success('Material saved!')
+  }
+
+  const handleNewMaterial = () => {
+    setCurrentMaterial(null)
+    setComposition({})
+    setProperties(null)
+    setMaterialName('')
+    toast.info('Started new material')
+  }
+
+  const handleExport = () => {
+    if (!currentMaterial && !properties) {
+      toast.error('No material to export')
+      return
+    }
+
+    const exportData = currentMaterial || {
+      name: materialName || 'Unnamed Material',
+      composition,
+      properties,
+    }
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${exportData.name}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('Material exported!')
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Toaster />
+      
+      <header className="border-b bg-card/50 backdrop-blur sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+                <Atom size={24} className="text-primary-foreground" weight="fill" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-tight">Material Tailoring Platform</h1>
+                <p className="text-xs text-muted-foreground hidden sm:block">
+                  AI-Powered Material Design & Optimization
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={handleNewMaterial}>
+                <Plus size={16} />
+                <span className="hidden sm:inline ml-2">New</span>
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleExport}>
+                <Download size={16} />
+                <span className="hidden sm:inline ml-2">Export</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <Tabs defaultValue="periodic" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="periodic" className="gap-2">
+                  <Atom size={18} />
+                  Periodic Table
+                </TabsTrigger>
+                <TabsTrigger value="database" className="gap-2">
+                  <Database size={18} />
+                  Material Database
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="periodic" className="space-y-6 mt-6">
+                <PeriodicTable
+                  selectedElements={composition}
+                  onElementToggle={handleElementToggle}
+                />
+              </TabsContent>
+
+              <TabsContent value="database" className="space-y-6 mt-6">
+                <MaterialBrowser onSelectMaterial={handleSelectMaterial} />
+              </TabsContent>
+            </Tabs>
+
+            {Object.keys(composition).length > 0 && (
+              <div className="space-y-6">
+                <CompositionEditor
+                  composition={composition}
+                  onChange={setComposition}
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-6">
+            <Card className="p-6 space-y-4">
+              <div className="flex items-center gap-2">
+                <Flask size={24} className="text-primary" />
+                <h2 className="text-lg font-semibold">Material Builder</h2>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Material Name</label>
+                <Input
+                  placeholder="Enter material name..."
+                  value={materialName}
+                  onChange={(e) => setMaterialName(e.target.value)}
+                />
+              </div>
+
+              {currentMaterial && (
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{currentMaterial.category}</Badge>
+                  {currentMaterial.properties.confidence && (
+                    <Badge variant="outline">
+                      {(currentMaterial.properties.confidence * 100).toFixed(0)}% Confidence
+                    </Badge>
+                  )}
+                </div>
+              )}
+
+              <div className="pt-4 border-t space-y-3">
+                <OptimizationDialog
+                  targetProperties={properties || undefined}
+                  onSelectResult={handleOptimizationResult}
+                />
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full"
+                  onClick={handleSaveMaterial}
+                  disabled={!properties}
+                >
+                  Save Material
+                </Button>
+              </div>
+            </Card>
+
+            {Object.keys(composition).length > 0 && (
+              <SimulationControls
+                composition={composition}
+                onPropertiesPredict={setProperties}
+              />
+            )}
+          </div>
+        </div>
+
+        {properties && (
+          <div className="mt-8">
+            <PropertyDisplay properties={properties} />
+          </div>
+        )}
+
+        {savedMaterials && savedMaterials.length > 0 && (
+          <div className="mt-12">
+            <Card className="p-6">
+              <h2 className="text-lg font-semibold mb-4">Saved Materials ({savedMaterials.length})</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {savedMaterials.map((material) => (
+                  <Card
+                    key={material.id}
+                    className="p-4 hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() => handleSelectMaterial(material)}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-semibold text-sm">{material.name}</h3>
+                        <Badge variant="secondary" className="text-xs shrink-0">
+                          {material.category}
+                        </Badge>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {Object.entries(material.composition).slice(0, 4).map(([symbol, percent]) => (
+                          <Badge key={symbol} variant="outline" className="text-xs">
+                            {symbol} {percent.toFixed(1)}%
+                          </Badge>
+                        ))}
+                        {Object.keys(material.composition).length > 4 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{Object.keys(material.composition).length - 4}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </Card>
+          </div>
+        )}
+      </main>
+    </div>
+  )
 }
 
 export default App
