@@ -222,7 +222,7 @@ export function LandingPage({ onEnter }: LandingPageProps) {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <Logo size="sm" />
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span>© 2024 MatTailor</span>
+              <span>© 2025 MatTailor</span>
               <span>•</span>
               <span>{t.landing.subtitle}</span>
             </div>
